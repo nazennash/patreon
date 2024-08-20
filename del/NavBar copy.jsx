@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Message } from 'react-icons-dom';
 import { BiCart } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-import { useCart } from '../CartProvider';
+import { apiConfig } from '../apiConfig';
 
 export const NavBar = () => {
-    const { cart } = useCart();
+    const [cartCount, setCartCount] = useState(0);
 
-    const totalQuantity = Object.values(cart).reduce((acc, quantity) => acc + quantity, 0);
+    const getCartCount = async () => {
+        try {
+            const response = await apiConfig.get('/products/carts');
+            const cartData = response.data; // Assume response.data is an array
+            if (cartData.length > 0) {
+                setCartCount(cartData[0].total_quantity); // Access the total_quantity from the first cart object
+            }
+        } catch (error) {
+            console.error("Error fetching cart count:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        getCartCount();
+    }, []);
 
     return (
         <header className="text-gray-600 body-font shadow-md">
@@ -37,7 +52,7 @@ export const NavBar = () => {
 
                     <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
                         <BiCart className="w-6 h-6 text-gray-700" />
-                        <span className="ml-1 font-bold">{totalQuantity}</span>
+                        <span className="ml-1 font-bold">{cartCount}</span>
                     </button>
                 </div>
             </div>

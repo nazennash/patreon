@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useCart } from '../CartProvider';
 
 const Modal = ({ isOpen, onClose, product }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { addToCart } = useCart();
 
     if (!isOpen) return null;
 
@@ -16,6 +18,14 @@ const Modal = ({ isOpen, onClose, product }) => {
         setCurrentIndex((prevIndex) =>
             prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
         );
+    };
+
+    const handleAddToCart = () => {
+        addToCart(product.id, 1);
+    };
+
+    const handleBuyNow = () => {
+        console.log('Buying Now: ', product);
     };
 
     return (
@@ -55,14 +65,14 @@ const Modal = ({ isOpen, onClose, product }) => {
 
                         <div className='flex justify-between'>
                             <button
-                                className='w-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l mt-4 items-center'
-                            // onClick={ }
+                                className='w-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l mt-4'
+                                onClick={handleAddToCart}
                             >
-                                &#43;  Cart
+                                &#43; Cart
                             </button>
                             <button
                                 className='w-1/2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-r mt-4'
-                            // onClick={ }
+                                onClick={handleBuyNow}
                             >
                                 Buy Now
                             </button>
