@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
         // Cookies.set('cart', JSON.stringify(updatedCart), { expires: 7 });
 
         const expiryDate = new Date();
-        expiryDate.setMinutes(expiryDate.getMinutes() + 30);
+        expiryDate.setMinutes(expiryDate.getMinutes() + 10);
 
         Cookies.set('cart', JSON.stringify(updatedCart), { expires: expiryDate });
     };
