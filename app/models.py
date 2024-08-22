@@ -24,20 +24,3 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
-
-    def save(self, *args, **kwargs):
-        if self.image:
-            sizes = [
-                (100, 100),  # Small
-                (400, 400),  # Medium
-                (600, 600),  # Large
-            ]
-            for size in sizes:
-                img = self.image.file
-                img.seek(0)  
-                image = Image.open(img)
-                resized_image = image.resize(size, resample=Image.BICUBIC)
-                resized_image_path = self.image.path.replace(self.image.name, f'{size[0]}x{size[1]}_{self.image.name}')
-                resized_image.save(resized_image_path)
-
-        super().save(*args, **kwargs)
