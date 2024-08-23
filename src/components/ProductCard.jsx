@@ -11,7 +11,7 @@ const ProductCard = ({ product }) => {
     const handleAddToCart = () => {
         const newQuantity = quantity + 1;
         setQuantity(newQuantity);
-        addToCart(product.id, 1);
+        addToCart(product, newQuantity);
     };
 
     const openModal = () => {

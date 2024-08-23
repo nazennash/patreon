@@ -24,17 +24,25 @@ export const CartProvider = ({ children }) => {
         checkCartExpiry();
     }, []);
 
-    const addToCart = (productId, quantity) => {
-        const updatedCart = { ...cart, [productId]: (cart[productId] || 0) + quantity };
+    const addToCart = (product, quantity) => {
+        const updatedCart = {
+            ...cart,
+            [product.id]: {
+                ...product,
+                quantity: (cart[product.id]?.quantity || 0) + quantity
+            }
+        };
         setCart(updatedCart);
-
-        // Set the cart cookie with a 7-day expiration time
-        // Cookies.set('cart', JSON.stringify(updatedCart), { expires: 7 });
 
         const expiryDate = new Date();
         expiryDate.setMinutes(expiryDate.getMinutes() + 10);
-
         Cookies.set('cart', JSON.stringify(updatedCart), { expires: expiryDate });
+    };
+
+    const removeFromCart = (productId) => {
+        const { [productId]: removedProduct, ...updatedCart } = cart;
+        setCart(updatedCart);
+        Cookies.set('cart', JSON.stringify(updatedCart));
     };
 
     const clearCart = () => {
@@ -42,8 +50,20 @@ export const CartProvider = ({ children }) => {
         setCart({});
     };
 
+    const updateCartQuantity = (productId, newQuantity) => {
+        const updatedCart = {
+            ...cart,
+            [productId]: {
+                ...cart[productId],
+                quantity: newQuantity
+            }
+        };
+        setCart(updatedCart);
+        Cookies.set('cart', JSON.stringify(updatedCart));
+    };
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateCartQuantity }}>
             {children}
         </CartContext.Provider>
     );

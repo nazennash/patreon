@@ -7,18 +7,19 @@ import { useCart } from '../CartProvider';
 export const NavBar = () => {
     const { cart } = useCart();
 
-    const totalQuantity = Object.values(cart).reduce((acc, quantity) => acc + quantity, 0);
+    // Calculate the total quantity of items in the cart
+    const totalQuantity = Object.values(cart).reduce((acc, item) => acc + (item.quantity || 0), 0);
 
     return (
-        <header className="text-gray-600 body-font shadow-md">
-            <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center justify-between">
-                <Link to="/" className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <header className="text-gray-600 body-font shadow-md ">
+            <div className="container mx-auto flex items-center justify-between p-5">
+                <Link to="/" className="flex items-center text-gray-900">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="30"
                         height="30"
                         xml:space="preserve"
-                        className="fill-current text-orange-600"
+                        className="fill-current text-orange-600 hidden sm:block"
                     >
                         <path
                             fillRule="evenodd"
@@ -29,16 +30,32 @@ export const NavBar = () => {
                     <span className="ml-3 text-2xl font-bold text-gray-900">Patreon</span>
                 </Link>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex space-x-2">
+                    <Link to="/login">
+                        <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
+                            <span className="ml-1 font-bold">Login</span>
+                        </button>
+                    </Link>
+
+                    <Link to="/register">
+                        <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
+                            <span className="ml-1 font-bold">Register</span>
+                        </button>
+                    </Link>
+                </div>
+
+                <div className="flex space-x-2 hidden sm:block">
                     <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
                         <Message className="w-6 h-6 text-gray-700" />
                         <span className="ml-1 font-bold">0</span>
                     </button>
 
-                    <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
-                        <BiCart className="w-6 h-6 text-gray-700" />
-                        <span className="ml-1 font-bold">{totalQuantity}</span>
-                    </button>
+                    <Link to="/cart">
+                        <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
+                            <BiCart className="w-6 h-6 text-gray-700" />
+                            <span className="ml-1 font-bold">{totalQuantity}</span>
+                        </button>
+                    </Link>
                 </div>
             </div>
         </header>

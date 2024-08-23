@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useCart } from '../CartProvider';
 
-const Modal = ({ isOpen, onClose, product }) => {
+const BuyNowModal = ({ isOpen, onClose, product }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const [deliveryPoint, setDeliveryPoint] = useState('');
+    const [thankYouMessage, setThankYouMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { addToCart } = useCart();
 
     if (!isOpen) return null;
@@ -22,12 +25,27 @@ const Modal = ({ isOpen, onClose, product }) => {
     };
 
     const handleAddToCart = () => {
-        addToCart(product, quantity);
-        setQuantity(1);
+        addToCart(product.id, quantity);
     };
 
     const handleBuyNow = () => {
+        setThankYouMessage(`
+            Thank you for buying ${quantity}  ${product.name}.\n
+            Check your phone for payment prompt.\n
+            Your order will be delivered to ${deliveryPoint}.\n
+            Check your email for delivery details.
+            `);
         console.log('Buying Now: ', product);
+    };
+
+    const handleQuantityChange = (amount) => {
+        setQuantity((prevQuantity) => Math.max(1, prevQuantity + amount));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        handleBuyNow();
     };
 
     return (
@@ -63,22 +81,49 @@ const Modal = ({ isOpen, onClose, product }) => {
                         <h2 className='text-xl font-bold mt-4'>{product.name}</h2>
                         <p className='text-md mt-2 mb-2'>Kshs. {product.price}</p>
                         <hr />
-                        <p className='mt-3'>{product.description}</p>
 
-                        <div className='flex justify-between'>
+                        <div className='flex items-center mt-4'>
                             <button
-                                className='w-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l mt-4'
-                                onClick={handleAddToCart}
+                                className='bg-gray-300 text-gray-700 px-2 py-1 rounded'
+                                onClick={() => handleQuantityChange(-1)}
+                                disabled={isSubmitting}
                             >
-                                &#43; Cart
+                                &#8722;
                             </button>
+                            <span className='mx-4 text-lg'>{quantity}</span>
                             <button
-                                className='w-1/2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-r mt-4'
-                                onClick={handleBuyNow}
+                                className='bg-gray-300 text-gray-700 px-2 py-1 rounded'
+                                onClick={() => handleQuantityChange(1)}
+                                disabled={isSubmitting}
                             >
-                                Buy Now
+                                &#43;
                             </button>
                         </div>
+
+                        <form className='mt-4' onSubmit={handleSubmit}>
+                            <input
+                                type='text'
+                                value={deliveryPoint}
+                                onChange={(e) => setDeliveryPoint(e.target.value)}
+                                placeholder='Enter delivery point (e.g., CBD, Nairobi)'
+                                className='w-full p-2 border border-gray-300 rounded mb-4'
+                                required
+                                disabled={isSubmitting}
+                            />
+
+                            <button
+                                type='submit'
+                                className={`w-full bg-green-500 text-white font-bold py-2 px-4 rounded ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
+                                    }`}
+                                disabled={isSubmitting}
+                            >
+                                Submit Order
+                            </button>
+                        </form>
+
+                        {thankYouMessage && (
+                            <p className='mt-4 text-green-600 font-bold'>{thankYouMessage}</p>
+                        )}
                     </>
                 )}
             </div>
@@ -86,4 +131,4 @@ const Modal = ({ isOpen, onClose, product }) => {
     );
 };
 
-export default Modal;
+export default BuyNowModal;

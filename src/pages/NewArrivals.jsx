@@ -3,7 +3,7 @@ import { apiConfig } from '../apiConfig';
 import ProductCard from '../components/ProductCard';
 import Modal from '../components/Modal';
 
-export const Products = () => {
+export const NewArrivals = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +13,7 @@ export const Products = () => {
 
     const getProducts = async (page = 1) => {
         try {
-            const response = await apiConfig.get(`/products/product/?page=${page}&limit=${itemsPerPage}`);
+            const response = await apiConfig.get(`/products/product/new_arrivals/?page=${page}&limit=${itemsPerPage}`);
             setProducts(response.data.results);
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -41,7 +41,7 @@ export const Products = () => {
     return (
         <div className='m-5'>
             <div className='mb-3'>
-                <h1 className='text-2xl font-semibold'>Products</h1>
+                <h1><span className='text-2xl font-semibold'>New Arrivals:</span> <span>updated less 30 mins ago</span></h1>
             </div>
             <hr />
             <div className='mt-3 flex flex-wrap'>
@@ -57,6 +57,7 @@ export const Products = () => {
                 <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
+                    // className='bg-gray-300 p-2 rounded-lg mr-2'
                     className='p-2 rounded-lg mr-2'
 
                 >
