@@ -6,6 +6,9 @@ __pycache__
 db.sqlite3
 media
 
+node_modules
+.vite/
+
 # Backup files # 
 *.bak 
 
