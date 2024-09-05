@@ -63,6 +63,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+DISABLE_COLLECTSTATIC = 1
 
 
 # Database
