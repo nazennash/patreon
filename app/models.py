@@ -9,7 +9,7 @@ class Category(models.Model):
 
 class CategoryImage(models.Model):
     category = models.ForeignKey(Category, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='../media/category_images/', blank=True, null=True, verbose_name='image', help_text='Image must be under 10MB', max_length=1000)
+    image = models.ImageField(upload_to='media/category_images/', blank=True, null=True, verbose_name='image', help_text='Image must be under 10MB', max_length=1000)
 
     def __str__(self):
         return f"Image for {self.category.name}"
@@ -33,7 +33,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='../media/product_images/', blank=True, null=True, verbose_name='image', help_text='Image must be under 10MB', max_length=1000)
+    image = models.ImageField(upload_to='media/product_images/', blank=True, null=True, verbose_name='image', help_text='Image must be under 10MB', max_length=1000)
 
     def __str__(self):
         return f"Image for {self.product.name}"
