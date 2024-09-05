@@ -14,7 +14,6 @@ class CategoryImage(models.Model):
     def __str__(self):
         return f"Image for {self.category.name}"
 
-
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
